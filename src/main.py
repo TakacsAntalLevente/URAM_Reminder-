@@ -5,6 +5,7 @@ import json
 import threading
 import time
 from win10toast import ToastNotifier
+from winotify import Notification, audio
 import winsound
 
 import pystray
@@ -12,6 +13,7 @@ from PIL import Image, ImageDraw
 import sys
 
 import os
+import time
 
 # -------------------------
 # Init
@@ -67,18 +69,16 @@ def run_tray():
 # Notification
 # -------------------------
 def notify(msg):
-    toaster.show_toast(
-        "Reminder",
-        msg,
-        duration=10,
-        threaded=True
+    toast = Notification(
+        app_id="URAM Reminder",
+        title="Reminder",
+        msg=msg
     )
 
-    try:
-        winsound.PlaySound(sound_path, winsound.SND_FILENAME)
-    except:
-        pass
+    toast.set_audio(audio.Default, loop=False)
+    toast.show()
 
+    winsound.PlaySound(sound_path, winsound.SND_FILENAME)
 # -------------------------
 # Background reminder loop
 # -------------------------
